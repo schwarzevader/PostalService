@@ -1,0 +1,75 @@
+package com.example.postservice.domain;
+
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+@Entity(name = "postalParcel")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "postal_parcels")
+public class PostalParcel implements Serializable {
+
+
+    // добавиить курьерскую доставку по адресу updatable=false
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "postal_parcel_id" ,unique = true, nullable = false)
+    private Long id;
+
+
+    @Enumerated(EnumType.STRING)
+    private  ParcelStatus parcelStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @JoinColumn(name = "parcel_client_id")
+    private ParcelClient parcelSender;
+
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @JoinColumn(name = "parcel_client_id" , insertable = false, updatable = false)
+    private ParcelClient parcelRecipient;
+
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @JoinColumn(name = "postOffice_id")
+    private PostOffice start;
+
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @JoinColumn(name = "postOffice_id" , insertable = false, updatable = false)
+    private PostOffice end;
+
+
+    @Enumerated(EnumType.STRING)
+    private  MethodOfReceiving methodOfReceiving;
+
+
+    private  double parcelWidth;
+    private  double parcelHeight;
+    private  double parcelLength;
+    private  double parcelWeight;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PostalParcel that = (PostalParcel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+}

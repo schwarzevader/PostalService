@@ -1,0 +1,55 @@
+graphhopper:
+  osmFile: "src/main/resources/static/ukraine-latest.osm.pbf"
+  graphFolder: "path/to/graph-cache"
+  graphURL: "https://graphhopper.com/api/1/vrp?key=api_key"
+
+server:
+  port: 8080
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+#      ddl-auto: update
+              ddl-auto: create
+        #      ddl-auto: none
+        #      ddl-auto: create-drop
+      #      dialect: org.hibernate.dialect.PostgreSQLDialect
+    #    dialect: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+#        cache:
+#          use_second_level_cache: true
+#          use_reference_entries : true
+#          region:
+#            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+            #            factory_class: org.hibernate.cache.internal.StandardQueryCache
+            #            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+#            javax:
+#              cache:
+#                provider: org.ehcache.jsr107.EhcacheCachingProvider
+#                uri: classpath:jcache.xml
+#          use_query_cache: true
+
+        dialect: org.hibernate.dialect.MySQL8Dialect
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  #    properties:
+  #      hibernate.jdbc.batch_size: 20
+  #      hibernate.cache.use_query_cache: false
+  #      hibernate.cache.use_second_level_cache: false
+  #      hibernate.cache.use_structured_entries: false
+  #      hibernate.cache.use_minimal_puts: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/postal_service_DB
+
+    username: root
+#    url: jdbc:postgresql://localhost:5432/shop_database
+#    username: postgres
+    password: 0510208486q
+#  sql:
+#    init:
+#      #      mode: embedded
+#      mode: always
+#      schema-locations: classpath:data.sql
+
