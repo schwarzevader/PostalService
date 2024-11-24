@@ -14,80 +14,66 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "postalCar")
+@Entity(name = "routeDirection")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "postal_cars")
-public class PostalCar implements Serializable, Identifiable {
+@Table(name = "route_directions")
+public class RouteDirection implements Serializable , Identifiable {
 
 
-
-    public static EntityVisitor<PostalCar, PostOffice> ENTITY_VISITOR = new EntityVisitor<PostalCar, PostOffice>(PostalCar.class) {
-
+    public static EntityVisitor<RouteDirection, PostOffice> ENTITY_VISITOR = new EntityVisitor<RouteDirection, PostOffice>(RouteDirection.class) {
         @Override
-        public PostOffice  getParent(PostalCar visitingObject) {
-            return visitingObject.getPostOffice();
+        public PostOffice getParent(RouteDirection visitingObject) {
+            return visitingObject.getPostOfficeStart();
         }
 
         @Override
-        public List<PostalCar> getChildren(PostOffice parent) {
-            return parent.getPostalCars();
+        public List<RouteDirection> getChildren(PostOffice parent) {
+            return parent.getRouteDirections();
         }
 
         @Override
         public void setChildren(PostOffice parent) {
-            parent.setPostalCars(new ArrayList<PostalCar>());
+            parent.setRouteDirections(new ArrayList<RouteDirection>());
         }
     };
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "postal_car_id" , unique = true, nullable = false)
+    @Column(name = "route_direction_id", unique = true, nullable = false)
     private Long id;
 
-    private String color;
+    private double distance;
 
-    private String vinCode;
-
-    private String carNumber;
-
-    private String carBrand;
-    private String carModel;
-
-
-
-
-
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "postOffice_id")
-    private PostOffice postOffice;
+    private PostOffice postOfficeStart;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "postOffice_id", insertable = false, updatable = false)
+    private PostOffice postOfficeGoal;
 
 
-
-
-    @OneToMany(mappedBy = "postalCar",
+    @OneToMany(mappedBy = "routeDirection",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<CarRoutDirectionItem> carRoutDirectionItemList = new ArrayList<>();
 
-//    public void  addRouteDistanceToOffice(PostOffice postOffice){
-//        toPostOffices.add(new RouteDistanceToOffice());
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PostalCar postalCar = (PostalCar) o;
-        return Objects.equals(id, postalCar.id);
+        RouteDirection that = (RouteDirection) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
     }
-}
 
+
+}

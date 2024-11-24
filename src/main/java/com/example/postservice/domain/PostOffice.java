@@ -54,6 +54,13 @@ public class PostOffice implements Serializable , Identifiable {
     private List<PostalCar> postalCars = new ArrayList<>();
 
 
+
+    @OneToMany(	mappedBy = "postOfficeStart",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<RouteDirection> routeDirections= new ArrayList<>();
+
     @OneToMany(	mappedBy = "start",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
