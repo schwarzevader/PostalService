@@ -4,6 +4,7 @@ import com.example.postservice.domain.PostOffice;
 import com.example.postservice.repository.PostOfficeRepo;
 import com.example.postservice.service.interfaces.DistanceCalculatorService;
 import com.example.postservice.service.interfaces.ShortestPathAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.*;
 
 
 @Service("aStarAlgorithm")
+@Slf4j
 public class AStarAlgorithm implements ShortestPathAlgorithm {
 
 
@@ -36,14 +38,15 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
 
         // Initialize the start node
         start.setDistance(0);
-        start.setHeuristic((float) calculateHeuristic(start, goal));
+        start.setHeuristic(calculateHeuristic(start, goal));
         openSet.add(start);
 
         // Store the path
         Map<PostOffice, PostOffice> cameFrom = new HashMap<>();
 
         while (!openSet.isEmpty()) {
-            PostOffice current = openSet.poll();
+            PostOffice current = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(openSet.poll().getId());
+
 
             // If the goal is reached, reconstruct the path
             if (current.equals(goal)) {
@@ -53,12 +56,15 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
             closedSet.add(current);
 
             // Explore neighbors
-            for (RouteDistanceToOffice edge : current.getPostalCars().stream().flatMap(car -> car.getToPostOffices().stream()).toList()) {
+            for (RouteDistanceToOffice edge :current.getPostalCars().stream().flatMap(car -> car.getRouterDirectoryAndDistance().stream()).toList() ) {
+
                 PostOffice neighbor = edge.getToPostOffice();
+
 
                 if (closedSet.contains(neighbor)) continue;
 
                 double tentativeGScore = current.getDistance() + edge.getDistance();
+
 
                 if (!openSet.contains(neighbor) || tentativeGScore < neighbor.getDistance()) {
                     cameFrom.put(neighbor, current);
@@ -81,6 +87,7 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
     }
 
     private static List<PostOffice> reconstructPath(Map<PostOffice, PostOffice> cameFrom, PostOffice current) {
+        log.info("reconstructPath");
         List<PostOffice> path = new ArrayList<>();
         while (current != null) {
             path.add(current);

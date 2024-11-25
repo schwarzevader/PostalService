@@ -90,7 +90,24 @@ public class PostOffice implements Serializable , Identifiable {
         return Objects.hashCode(id);
     }
 
-
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", city=" + city.toString() +
+                ", street='" + street + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", fromStartToThisPostOffice=" + fromStartToThisPostOffice +
+                ", distance=" + distance +
+                ", heuristic=" + heuristic +
+                ", postalCars=" + postalCars +
+//                ", parcels=" + parcels +
+//                ", receivedParcels=" + receivedParcels +
+                ", routeDistanceToOffices=" + routeDistanceToOffices.toString() +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }
 
 

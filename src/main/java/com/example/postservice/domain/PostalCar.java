@@ -52,6 +52,8 @@ public class PostalCar implements Serializable, Identifiable {
     private String vinCode;
 
     private String carNumber;
+    private String carBrand;
+    private String carModel;
 
 
 
@@ -63,7 +65,7 @@ public class PostalCar implements Serializable, Identifiable {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<RouteDistanceToOffice> toPostOffices =new ArrayList<>();
+    private List<RouteDistanceToOffice> routerDirectoryAndDistance =new ArrayList<>();
 
 //    public void  addRouteDistanceToOffice(PostOffice postOffice){
 //        toPostOffices.add(new RouteDistanceToOffice());
@@ -80,6 +82,20 @@ public class PostalCar implements Serializable, Identifiable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "PostalCar{" +
+                "id=" + id +
+                ", color='" + color + '\'' +
+                ", vinCode='" + vinCode + '\'' +
+                ", carNumber='" + carNumber + '\'' +
+                ", carBrand='" + carBrand + '\'' +
+                ", carModel='" + carModel + '\'' +
+//                ", postOffice=" + postOffice.getPostalCars().toString() +
+                ", toPostOffices=" + routerDirectoryAndDistance.toString() +
+                '}';
     }
 }
 

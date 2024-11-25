@@ -25,8 +25,11 @@ public class PostOfficeRepo {
         List<RouteDistanceToOffice> distanceToOfficeList =  this.entityManager
                 .createQuery("select r " +
                         "from  routeDistances  r " +
-                                "inner join r.postalCar c " +
-                                "inner join c.postOffice p " +
+                                "inner join fetch r.toPostOffice tpo " +
+                                "inner join fetch tpo.postalCars pc " +
+                                "inner join fetch r.postalCar c " +
+                                "inner join fetch c.postOffice p " +
+
                                 "where p.id =:id"
                         ,RouteDistanceToOffice.class)
                 .setParameter("id",id)

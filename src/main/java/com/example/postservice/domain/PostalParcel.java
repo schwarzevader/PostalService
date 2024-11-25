@@ -72,4 +72,22 @@ public class PostalParcel implements Serializable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", parcelStatus=" + parcelStatus.toString() +
+                ", parcelSender=" + parcelSender.toString() +
+                ", parcelRecipient=" + parcelRecipient.toString() +
+                ", city=" + city.toString() +
+                ", start=" + start.getId() +
+                ", end=" + end.getId() +
+                ", methodOfReceiving=" + methodOfReceiving.toString() +
+                ", parcelWidth=" + parcelWidth +
+                ", parcelHeight=" + parcelHeight +
+                ", parcelLength=" + parcelLength +
+                ", parcelWeight=" + parcelWeight +
+                '}';
+    }
 }

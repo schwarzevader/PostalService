@@ -30,12 +30,12 @@ public class RouteDistanceToOffice implements Serializable , Identifiable {
 
         @Override
         public List<RouteDistanceToOffice> getChildren(PostalCar parent) {
-            return parent.getToPostOffices();
+            return parent.getRouterDirectoryAndDistance();
         }
 
         @Override
         public void setChildren(PostalCar parent) {
-            parent.setToPostOffices(new ArrayList<RouteDistanceToOffice>());
+            parent.setRouterDirectoryAndDistance(new ArrayList<RouteDistanceToOffice>());
         }
     };
 
@@ -61,5 +61,16 @@ public class RouteDistanceToOffice implements Serializable , Identifiable {
         this.distance = distance;
         this.toPostOffice = toPostOffice;
         this.postalCar = postalCar;
+    }
+
+
+    @Override
+    public String toString() {
+        return "RouteDistanceToOffice{" +
+                "id=" + id +
+                ", distance=" + distance +
+                ", toPostOffice=" + toPostOffice.getId()+
+                ", postalCar=" + postalCar.getId() +
+                '}';
     }
 }

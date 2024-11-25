@@ -39,7 +39,7 @@ public class DijkstraAlgorithm implements ShortestPathAlgorithm {
         distances.put(start, 0.0);
 
         while (!queue.isEmpty()) {
-            PostOffice current = queue.poll(); // Извлекаем узел с минимальным расстоянием
+            PostOffice current = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(queue.poll().getId()); // Извлекаем узел с минимальным расстоянием
 
             // Если текущий узел — целевой, завершить
             if (current.equals(goal)) {
@@ -47,8 +47,9 @@ public class DijkstraAlgorithm implements ShortestPathAlgorithm {
             }
 
             // Обрабатываем всех соседей текущего узла
-            for (RouteDistanceToOffice edge : current.getPostalCars().stream().flatMap(car -> car.getToPostOffices().stream()).toList()) {
+            for (RouteDistanceToOffice edge : current.getPostalCars().stream().flatMap(car -> car.getRouterDirectoryAndDistance().stream()).toList()) {
                 PostOffice neighbor = edge.getToPostOffice();
+//                PostOffice neighbor = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(edge.getToPostOffice().getId());
                 double newDist = current.getDistance() + edge.getDistance();
 
                 // Если найдено более короткое расстояние до соседа

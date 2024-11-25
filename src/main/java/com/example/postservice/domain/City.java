@@ -52,5 +52,15 @@ public class City {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id:" + id +
+                ", cityName:'" + cityName + '\'' +
+                ", postOffices:" + postOffices.toString() +
+//                ", postalParcels:" + postalParcels.toString() +
+                '}';
+    }
 }
 
