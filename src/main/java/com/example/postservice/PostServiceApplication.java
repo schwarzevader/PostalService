@@ -30,7 +30,10 @@ public class PostServiceApplication implements CommandLineRunner {
 
 //        shortestPathAlgorithm.findShortestPath(1000L,1017L);
 //        System.out.println("size of path============"+shortestPathAlgorithm.findShortestPath(1000L,1017L).size());
+
+        shortestPathAlgorithm.findShortestPath(1000L,1017L).forEach((e-> System.out.println(e.getId())));
         shortestPathAlgorithm.findShortestPath(1000L,1017L).forEach(e-> System.out.println(e.getId()));
+
 //        System.out.println("id = "+postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(1000L).getId());
 //        System.out.println(postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(1000L).getPostalCars().toString());
 //        System.out.println(postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(1000L)

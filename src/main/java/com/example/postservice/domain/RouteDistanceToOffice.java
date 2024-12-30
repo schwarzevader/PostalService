@@ -3,11 +3,14 @@ package com.example.postservice.domain;
 
 import com.example.postservice.util.utilTreeForPostOffice.EntityVisitor;
 import com.example.postservice.util.utilTreeForPostOffice.Identifiable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "route_distances")
+@RedisHash(value = "RouteDistanceToOffice")
 public class RouteDistanceToOffice implements Serializable , Identifiable {
 
 
@@ -50,7 +54,7 @@ public class RouteDistanceToOffice implements Serializable , Identifiable {
 
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "postOffice_id")
+    @JoinColumn(name = "post_office_id")
     private PostOffice toPostOffice;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)

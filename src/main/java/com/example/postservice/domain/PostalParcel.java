@@ -1,6 +1,7 @@
 package com.example.postservice.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,11 +44,12 @@ public class PostalParcel implements Serializable {
     private City city;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "postOffice_id")
+    @JoinColumn(name = "post_office_id")
+//    @JsonBackReference
     private PostOffice start;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "postOffice_id" , insertable = false, updatable = false)
+    @JoinColumn(name = "post_office_id" , insertable = false, updatable = false)
     private PostOffice end;
 
 

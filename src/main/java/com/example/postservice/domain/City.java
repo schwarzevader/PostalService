@@ -1,13 +1,17 @@
 package com.example.postservice.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +21,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "cities")
-public class City {
+//@RedisHash(value = "City")
+public class City implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -58,7 +63,7 @@ public class City {
         return "{" +
                 "id:" + id +
                 ", cityName:'" + cityName + '\'' +
-                ", postOffices:" + postOffices.toString() +
+//                ", postOffices:" + postOffices.toString() +
 //                ", postalParcels:" + postalParcels.toString() +
                 '}';
     }

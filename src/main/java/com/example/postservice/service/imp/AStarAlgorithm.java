@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.example.postservice.domain.RouteDistanceToOffice;
+
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 
 @Service("aStarAlgorithm")
@@ -28,8 +31,8 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
 
     public  List<PostOffice> findShortestPath(Long startId, Long goalId) {
 
-        PostOffice start = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(startId);
-        PostOffice goal =this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(goalId);
+        var start = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(startId);
+        var goal =this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(goalId);
 
         // Open set for exploration
         PriorityQueue<PostOffice> openSet = new PriorityQueue<>(Comparator.comparingDouble(po -> po.getDistance() + po.getHeuristic()));
@@ -45,7 +48,7 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
         Map<PostOffice, PostOffice> cameFrom = new HashMap<>();
 
         while (!openSet.isEmpty()) {
-            PostOffice current = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(openSet.poll().getId());
+            var current = this.postOfficeRepo.findPostOfficeByIdWithAllCarsAndRout(openSet.poll().getId());
 
 
             // If the goal is reached, reconstruct the path
@@ -58,7 +61,7 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
             // Explore neighbors
             for (RouteDistanceToOffice edge :current.getPostalCars().stream().flatMap(car -> car.getRouterDirectoryAndDistance().stream()).toList() ) {
 
-                PostOffice neighbor = edge.getToPostOffice();
+                var neighbor = edge.getToPostOffice();
 
 
                 if (closedSet.contains(neighbor)) continue;
@@ -79,7 +82,7 @@ public class AStarAlgorithm implements ShortestPathAlgorithm {
         }
 
         // Return an empty path if no path is found
-        return new ArrayList<>();
+        return new ArrayList<PostOffice>();
     }
 
     private  double calculateHeuristic(PostOffice from, PostOffice to) {

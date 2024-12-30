@@ -3,6 +3,8 @@ package com.example.postservice.domain;
 
 import com.example.postservice.util.utilTreeForPostOffice.EntityVisitor;
 import com.example.postservice.util.utilTreeForPostOffice.Identifiable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +60,7 @@ public class PostalCar implements Serializable, Identifiable {
 
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "postOffice_id")
+    @JoinColumn(name = "post_office_id")
     private PostOffice postOffice;
 
     @OneToMany(	mappedBy = "postalCar",

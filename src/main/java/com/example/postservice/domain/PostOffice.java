@@ -2,11 +2,14 @@ package com.example.postservice.domain;
 
 import com.example.postservice.util.utilTreeForPostOffice.EntityVisitor;
 import com.example.postservice.util.utilTreeForPostOffice.Identifiable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +21,8 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "postOffice")
+@Table(name = "post_office")
+@RedisHash(value = "PostOffice")
 public class PostOffice implements Serializable , Identifiable {
 
 
@@ -26,7 +30,7 @@ public class PostOffice implements Serializable , Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "postOffice_id" , unique = true, nullable = false)
+    @Column(name = "post_office_id" , unique = true, nullable = false)
     private Long id;
 
 
@@ -34,6 +38,7 @@ public class PostOffice implements Serializable , Identifiable {
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
+    @JsonIgnore
     private City city;
     private String street;
     private String houseNumber;
@@ -45,7 +50,7 @@ public class PostOffice implements Serializable , Identifiable {
     private double distance;
 
     @Transient
-    private double heuristic;;
+    private double heuristic;
 
     @OneToMany(	mappedBy = "postOffice",
             fetch = FetchType.LAZY,
@@ -58,6 +63,7 @@ public class PostOffice implements Serializable , Identifiable {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+//    @JsonManagedReference
     private List<PostalParcel> parcels= new ArrayList<>();
 
 
@@ -94,7 +100,7 @@ public class PostOffice implements Serializable , Identifiable {
     public String toString() {
         return "{" +
                 "id=" + id +
-                ", city=" + city.toString() +
+//                ", city=" + city.toString() +
                 ", street='" + street + '\'' +
                 ", houseNumber='" + houseNumber + '\'' +
                 ", fromStartToThisPostOffice=" + fromStartToThisPostOffice +
