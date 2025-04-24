@@ -15,7 +15,7 @@ public class SqlDijkstraAlgorithm {
     private EntityManager entityManager;
 
     public void sqlDijkstraAlgorithm(Object from ,Object to){
-        
+
     }
 
 
