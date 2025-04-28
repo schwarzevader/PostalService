@@ -3,47 +3,30 @@ package com.example.postservice.domain.neo4j;
 
 import com.example.postservice.util.utilTreeForPostOffice.EntityVisitor;
 import com.example.postservice.util.utilTreeForPostOffice.Identifiable;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "routeDistances")
+@Node("routeDistances")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "route_distances")
-@RedisHash(value = "RouteDistanceToOffice")
-public class RouteDistanceToOffice implements Serializable , Identifiable {
+public class RouteDistanceToOffice implements Serializable {
 
 
-    public static EntityVisitor<RouteDistanceToOffice, PostalCar> ENTITY_VISITOR = new EntityVisitor<RouteDistanceToOffice, PostalCar>(RouteDistanceToOffice.class) {
-        @Override
-        public PostalCar getParent(RouteDistanceToOffice visitingObject) {
-            return visitingObject.getPostalCar();
-        }
 
-        @Override
-        public List<RouteDistanceToOffice> getChildren(PostalCar parent) {
-            return parent.getRouterDirectoryAndDistance();
-        }
-
-        @Override
-        public void setChildren(PostalCar parent) {
-            parent.setRouterDirectoryAndDistance(new ArrayList<RouteDistanceToOffice>());
-        }
-    };
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "route_distance_id" , unique = true, nullable = false)
+    @GeneratedValue
     private Long id;
 
 
@@ -51,12 +34,10 @@ public class RouteDistanceToOffice implements Serializable , Identifiable {
     private double distance;
 
 
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_office_id")
+    @Relationship(type = "", direction = Relationship.Direction.INCOMING)
     private PostOffice toPostOffice;
 
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "postal_car_id")
+    @Relationship(type = "", direction = Relationship.Direction.INCOMING)
     private PostalCar postalCar;
 
     public RouteDistanceToOffice(double distance, PostOffice toPostOffice, PostalCar postalCar) {

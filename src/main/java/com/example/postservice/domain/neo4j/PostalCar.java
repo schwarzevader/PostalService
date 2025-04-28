@@ -3,70 +3,40 @@ package com.example.postservice.domain.neo4j;
 
 import com.example.postservice.util.utilTreeForPostOffice.EntityVisitor;
 import com.example.postservice.util.utilTreeForPostOffice.Identifiable;
-import jakarta.persistence.*;
+import org.springframework.data.neo4j.core.schema.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "postalCar")
+@Node("PostalCar")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "postal_cars")
 public class PostalCar implements Serializable, Identifiable {
 
-
-
-    public static EntityVisitor<PostalCar, PostOffice> ENTITY_VISITOR = new EntityVisitor<PostalCar, PostOffice>(PostalCar.class) {
-
-        @Override
-        public PostOffice getParent(PostalCar visitingObject) {
-            return visitingObject.getPostOffice();
-        }
-
-        @Override
-        public List<PostalCar> getChildren(PostOffice parent) {
-            return parent.getPostalCars();
-        }
-
-        @Override
-        public void setChildren(PostOffice parent) {
-            parent.setPostalCars(new ArrayList<PostalCar>());
-        }
-    };
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "postal_car_id" , unique = true, nullable = false)
+    @Id @GeneratedValue
     private Long id;
 
     private String color;
-
     private String vinCode;
-
     private String carNumber;
     private String carBrand;
     private String carModel;
 
-
-
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_office_id")
+    @Relationship(type = "HAS_CAR", direction = Relationship.Direction.INCOMING)
     private PostOffice postOffice;
 
-    @OneToMany(	mappedBy = "postalCar",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<RouteDistanceToOffice> routerDirectoryAndDistance =new ArrayList<>();
-
+    @Relationship(type = "HAS_ROUTE", direction = Relationship.Direction.OUTGOING)
+    private List<RouteDistanceToOffice> routerDirectoryAndDistance = new ArrayList<>();
 //    public void  addRouteDistanceToOffice(PostOffice postOffice){
 //        toPostOffices.add(new RouteDistanceToOffice());
 //    }

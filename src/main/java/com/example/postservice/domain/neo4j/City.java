@@ -1,44 +1,36 @@
 package com.example.postservice.domain.neo4j;
 
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "city")
+@Node("City")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "cities")
-//@RedisHash(value = "City")
 public class City implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "city_id" , unique = true, nullable = false)
+    @GeneratedValue
     private Long id;
 
+    @Property("cityName")
     private String cityName;
 
-    @OneToMany(	mappedBy = "city",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "HAS_POST_OFFICE", direction = Relationship.Direction.OUTGOING)
     private List<PostOffice> postOffices = new ArrayList<>();
 
-
-    @OneToMany(	mappedBy = "city",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "HAS_PARCEL", direction = Relationship.Direction.OUTGOING)
     private List<PostalParcel> postalParcels = new ArrayList<>();
 
 

@@ -1,82 +1,65 @@
 package com.example.postservice.domain.neo4j;
 
-import com.example.postservice.util.utilTreeForPostOffice.EntityVisitor;
-import com.example.postservice.util.utilTreeForPostOffice.Identifiable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.*;
+
 import org.springframework.data.redis.core.RedisHash;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "postOffice")
+
+@Node("Post_Office")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "post_office")
-@RedisHash(value = "PostOffice")
-public class PostOffice implements Serializable , Identifiable {
+public class PostOffice implements Serializable  {
 
 
-    public static EntityVisitor<PostOffice, Identifiable> ENTITY_VISITOR = new EntityVisitor<PostOffice, Identifiable>(PostOffice.class) {};
+
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "post_office_id" , unique = true, nullable = false)
+    @GeneratedValue
     private Long id;
 
 
 
 
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "city_id")
-    @JsonIgnore
+    @Relationship(type = "CITY", direction = Relationship.Direction.INCOMING)
     private City city;
     private String street;
     private String houseNumber;
 
-    @Transient
+
     private  double fromStartToThisPostOffice;
 
-    @Transient
+
     private double distance;
 
-    @Transient
+
     private double heuristic;
 
-    @OneToMany(	mappedBy = "postOffice",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "", direction = Relationship.Direction.OUTGOING)
     private List<PostalCar> postalCars = new ArrayList<>();
 
 
-    @OneToMany(	mappedBy = "start",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-//    @JsonManagedReference
+    @Relationship(type = "", direction = Relationship.Direction.OUTGOING)
     private List<PostalParcel> parcels= new ArrayList<>();
 
 
 
-    @OneToMany(	mappedBy = "end",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "", direction = Relationship.Direction.OUTGOING)
     private List<PostalParcel> receivedParcels= new ArrayList<>();
 
-    @OneToMany(	mappedBy = "toPostOffice",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "", direction = Relationship.Direction.OUTGOING)
     private List<RouteDistanceToOffice> routeDistanceToOffices= new ArrayList<>();
 
    private double latitude;

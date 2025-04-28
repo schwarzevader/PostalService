@@ -1,47 +1,42 @@
 package com.example.postservice.domain.neo4j;
 
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
+import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.*;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "parcelClient")
+@Node("ParcelClient")
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@Table(name = "parcel_clients")
-public class ParcelClient implements Serializable {
-
+@AllArgsConstructor
+public class ParcelClient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "parcel_client_id" ,  unique = true, nullable = false)
+    @GeneratedValue
     private Long id;
 
-    @NaturalId
+
     private String phoneNumber;
 
     private String mail;
 
-
-    @OneToMany(	mappedBy = "parcelSender",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "SENT_PARCEL", direction = Relationship.Direction.OUTGOING)
     private List<PostalParcel> sentParcels = new ArrayList<>();
 
-    @OneToMany(	mappedBy = "parcelRecipient",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @Relationship(type = "RECEIVED_PARCEL", direction = Relationship.Direction.OUTGOING)
     private List<PostalParcel> receivedParcels = new ArrayList<>();
+
+
 
     @Override
     public boolean equals(Object o) {
